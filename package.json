@@ -1,0 +1,28 @@
+{
+  "name": "byte-parse-as",
+  "version": "1.0.0",
+  "description": "This library was designed out of necesity. In order to parse a stream of bytes, there needs to be a higher level\r concept of dealing with streams, concatenating bytes together to ensure that things can be parsed meangingfully,\r and over time. In fact, because assemblyscript has numerous ways of expressing byte arrays, it becomes incredibly\r difficult to read the bytes into a stream and use references in a performant way. This is why `byte-parse-as` exists,\r to ensure that developers can confidently tokenize and parse through their data in a performant way.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests",
+    "asbuild:debug": "asc assembly/index.ts --target debug",
+    "asbuild:release": "asc assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@as-pect/cli": "^7.0.8",
+    "@assemblyscript/loader": "^0.21.5",
+    "assemblyscript": "^0.21.5"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
+  }
+}
