@@ -229,10 +229,10 @@ export class AnyOfRule extends Rule {
   test(buffer: ByteSink, index: i32, range: Range): bool {
     let chars = this.chars;
     let length = chars.byteLength;
-    if (buffer.byteLength < index + 1) return false;
+    if (buffer.byteLength <= index) return false;
     let compare = buffer.read(index);
     for (let i = 0; i < length; i++) {
-      let char = load<u8>(changetype<usize>(chars));
+      let char = load<u8>(changetype<usize>(chars) + <usize>i);
       if (char == compare) {
         range.start = index;
         range.end = index + 1;
