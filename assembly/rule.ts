@@ -3,8 +3,8 @@ import { ByteSink } from "./sink";
 export class Range {
 
   constructor(
-    public start: i32 = 0,
-    public end: i32 = 0,
+    public start: i32,
+    public end: i32,
     public stream: ByteSink,
   ) {}
 
