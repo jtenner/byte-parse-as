@@ -242,3 +242,15 @@ export class AnyOfRule extends Rule {
     return false;
   }
 }
+
+export class EmptyRule extends Rule {
+  constructor() { super(); }
+  test(buffer: ByteSink, index: i32, range: Range): bool {
+    range.start = index;
+    range.end = index;
+    return true;
+  }
+
+}
+
+@lazy export const EMPTY = new EmptyRule();
