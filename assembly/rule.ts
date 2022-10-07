@@ -61,7 +61,7 @@ export class KeywordRule extends Rule {
     let compareLength = compare.byteLength;
     if (buffer.byteLength < index + compareLength) return false;
     let diff = memory.compare(
-      changetype<usize>(buffer) + <usize>index,
+      buffer.dataStart + <usize>index,
       changetype<usize>(compare),
       <usize>compareLength,
     );
