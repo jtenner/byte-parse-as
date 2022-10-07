@@ -193,7 +193,7 @@ export class ByteSink {
   }
 
   get byteLength(): i32 {
-    return this.capacity;
+    return this.offset;
   }
 
   read(index: i32): u8 {
