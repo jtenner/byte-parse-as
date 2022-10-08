@@ -30,10 +30,11 @@ let Parser = new EveryRule([Ten, Twenty, Thirty]);
 // create a range object, referencing the sink
 let range = new Range(0, 0, sink);
 
+// test the rule
 Parser.test(sink, 0 /* Index */, range); // true
 
 // range is now set, if `Parser.test()` returns true
-let bytes = range.toArrayBuffer(); // array buffer
+let bytes = range.toArrayBuffer(); // array buffer containing [0x10, 0x20, 0x30]
 ```
 
 Working with strings and utf16 would likely be difficult, so using the `ByteSink` method
@@ -50,6 +51,43 @@ Need a pointer to the data? Easy.
 ```ts
 sink.dataStart; // usize
 ```
+
+## Rules
+
+Rules are classes with a `Test` method that read from the byte sink, typically
+starting at the `index` provided.
+
+It must set the `Range` provided and return `true` if there is a match.
+
+```ts
+export abstract class Rule {
+  abstract test(buffer: ByteSink, index: i32, range: Range): bool;
+}
+```
+
+### Equals Rule
+
+The equals rule tests a single byte in the sink.
+
+```ts
+// Create the rule
+let A = new EqualsRule(0x41); // "A"
+
+// make a sink and write some bytes to it.
+let sink = new ByteSink();
+sink.write("TEST A");
+
+// Create a range, you only need one
+let range = new Range(0, 0, sink);
+
+// test the rule and pull out the bytes
+A.test(sink, 5, range); // true!
+
+range.toString(); // "A"
+
+```
+
+
 
 ## License
 

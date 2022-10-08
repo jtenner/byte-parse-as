@@ -45,6 +45,7 @@ export class ByteSink {
     else if (source instanceof String) this.writeString(<string>source, start, end);
     else if (source instanceof Uint8Array) this.writeUint8Array(<Uint8Array>source, start, end);
     else if (source instanceof Array<u8>) this.writeArray(<Array<u8>>source, start, end);
+    else if (isInteger(source) || isFloat(source)) this.writeNumber(source);
   }
 
   writeUint8Array(src: Uint8Array, start: i32 = 0, end: i32 = i32.MAX_VALUE): void {
