@@ -9,7 +9,47 @@ to ensure that developers can confidently tokenize and parse through their data 
 
 ## Usage
 
+```ts
+import { ByteSink, EqualsRule, EveryRule } from "byte-parse-as/assembly";
 
+// some bytes input
+let bytes = [0x10, 0x20, 0x30];
+
+// create a sink and write the bytes
+let sink = new ByteSink();
+sink.write(bytes);
+
+// create a bunch of byte rules
+let Ten = new EqualsRule(0x10);
+let Twenty = new EqualsRule(0x20);
+let Thirty = new EqualdRule(0x30);
+
+// combine them using EveryRule
+let Parser = new EveryRule([Ten, Twenty, Thirty]);
+
+// create a range object, referencing the sink
+let range = new Range(0, 0, sink);
+
+Parser.test(sink, 0 /* Index */, range); // true
+
+// range is now set, if `Parser.test()` returns true
+let bytes = range.toArrayBuffer(); // array buffer
+```
+
+Working with strings and utf16 would likely be difficult, so using the `ByteSink` method
+will convert strings passed to the `write()` function to utf8 in the internal buffer.
+
+```ts
+let sink = new ByteSink();
+sink.write("Hello");
+sink.byteLength; // 5
+```
+
+Need a pointer to the data? Easy.
+
+```ts
+sink.dataStart; // usize
+```
 
 ## License
 
