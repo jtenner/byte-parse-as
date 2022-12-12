@@ -168,7 +168,7 @@ export class ByteSink {
   }
 
   toArrayBuffer(): ArrayBuffer {
-    return this.buffer.slice();
+    return this.buffer.slice(0, this.byteLength);
   }
 
   toStaticArray(): StaticArray<u8> {

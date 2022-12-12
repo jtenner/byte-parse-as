@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@as-pect/cli": "^7.0.8",
-    "@assemblyscript/loader": "^0.21.5",
-    "assemblyscript": "^0.21.5"
+    "@as-pect/cli": "^8.0.0",
+    "@assemblyscript/loader": "^0.24.0",
+    "assemblyscript": "^0.24.0"
   },
   "type": "module",
   "exports": {
