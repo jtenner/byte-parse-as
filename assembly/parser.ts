@@ -1,6 +1,7 @@
 import { Range, Rule } from "./rule";
 import { ByteSink } from "./sink";
 
+/** Helper box class. */
 export class Box<T> { constructor(public value: T) { } }
 
 /**
@@ -126,6 +127,7 @@ export abstract class ManyPostProcessor<T, U> extends PostProcessor<T> {
     super();
   }
 
+  /** Test many of the given rule, consume at least one, and defer to the postProcess function that returns a T. */
   test(buffer: ByteSink, index: i32, range: Range): bool {
     let start = index;
     let rule = this.rule;

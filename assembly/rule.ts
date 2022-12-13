@@ -331,6 +331,7 @@ export class EmptyRule extends Rule {
   }
 }
 
+/** Matches an epsilon rule, empty string. */
 @lazy export const EMPTY = new EmptyRule();
 
 /** Test to see if the given index is at the end of input. */

@@ -39,6 +39,12 @@ export class ByteSink {
   get capacity(): i32 {
     return this.buffer.byteLength >>> 1;
   }
+  
+  @unsafe writeRaw(source: usize, length: usize): void {
+    this.ensureCapacity(length);
+    memory.copy(this.dataStart + this.offset, source, length);
+    this.offset += length;
+  }
 
   write<T>(source: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): void {
     if (source instanceof ArrayBuffer) this.writeBuffer(<ArrayBuffer>source, start, end);
@@ -136,6 +142,7 @@ export class ByteSink {
   }
 
   writeNumber<T extends number>(value: T): void {
+    this.ensureCapacity(sizeof<T>());
     let offset = this.offset;
     let buffer = this.buffer;
     store<T>(changetype<usize>(buffer) + <usize>offset, value);
@@ -161,26 +168,60 @@ export class ByteSink {
     this.reserve(0, true);
   }
 
-  toString(): string {
+  toString(start: i32 = 0, end: i32 = i32.MAX_VALUE): string {
+    let len = this.byteLength as u32;
+
+    if (start != 0 || end != i32.MAX_VALUE) {
+      let from: i32;
+      from  = min<i32>(max(start, 0), len);
+      end   = min<i32>(max(end,   0), len);
+      start = min<i32>(from, end);
+      end   = max<i32>(from, end);
+      len   = end - start;
+    }
+
     let size = this.offset;
-    if (!size) return "";
-    return String.UTF8.decode(this.buffer);
+    if (!size || !len) return "";
+    return String.UTF8.decodeUnsafe(this.dataStart + start, len);
   }
 
-  toArrayBuffer(): ArrayBuffer {
-    return this.buffer.slice(0, this.byteLength);
+  toArrayBuffer(start: i32 = 0, end: i32 = i32.MAX_VALUE): ArrayBuffer {
+    let len = this.byteLength as u32;
+
+    if (start != 0 || end != i32.MAX_VALUE) {
+      let from: i32;
+      from  = min<i32>(max(start, 0), len);
+      end   = min<i32>(max(end,   0), len);
+      start = min<i32>(from, end);
+      end   = max<i32>(from, end);
+      len   = end - start;
+    }
+
+    return this.buffer.slice(start, len);
   }
 
-  toStaticArray(): StaticArray<u8> {
-    let length = this.buffer.byteLength
-    let result = new StaticArray<u8>(length);
+  
+  toStaticArray(start: i32 = 0, end: i32 = i32.MAX_VALUE): ArrayBuffer {
+    let len = this.byteLength as u32;
+
+    if (start != 0 || end != i32.MAX_VALUE) {
+      let from: i32;
+      from  = min<i32>(max(start, 0), len);
+      end   = min<i32>(max(end,   0), len);
+      start = min<i32>(from, end);
+      end   = max<i32>(from, end);
+      len   = end - start;
+    }
+
+    let output = new StaticArray(len);
     memory.copy(
-      changetype<usize>(result),
-      changetype<usize>(this.buffer),
-      <usize>length,
+      changetype<usize>(output),
+      this.dataStart + <usize>start,
+      <usize>len,
     );
-    return result;
+    return this.buffer.slice(start, len);
   }
+
 
   @inline protected ensureCapacity(deltaBytes: u32): void {
     let buffer  = this.buffer;
@@ -206,5 +247,20 @@ export class ByteSink {
 
   get dataStart(): usize {
     return changetype<usize>(this.buffer);
+  }
+
+  clone(start: i32 = 0, end: i32 = i32.MAX_VALUE): ByteSink {
+    let len = this.byteLength as u32;
+
+    if (start != 0 || end != i32.MAX_VALUE) {
+      let from: i32;
+      from  = min<i32>(max(start, 0), len);
+      end   = min<i32>(max(end,   0), len);
+      start = min<i32>(from, end);
+      end   = max<i32>(from, end);
+      // len   = end - start;
+    }
+
+    return new ByteSink(this.buffer.slice(start, end), this.capacity);
   }
 }
