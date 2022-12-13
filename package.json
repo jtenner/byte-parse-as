@@ -1,6 +1,6 @@
 {
   "name": "byte-parse-as",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parse bytes using lexer combinators.",
   "main": "index.js",
   "scripts": {
