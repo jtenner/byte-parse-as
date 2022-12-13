@@ -1,10 +1,10 @@
 {
   "name": "byte-parse-as",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parse bytes using lexer combinators.",
   "main": "index.js",
   "scripts": {
-    "test": "node tests",
+    "test": "asp",
     "asbuild:debug": "asc assembly/index.ts --target debug",
     "asbuild:release": "asc assembly/index.ts --target release",
     "asbuild": "npm run asbuild:debug && npm run asbuild:release",
@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@as-pect/cli": "^7.0.8",
-    "@assemblyscript/loader": "^0.21.5",
-    "assemblyscript": "^0.21.5"
+    "@as-pect/cli": "^8.0.1",
+    "@assemblyscript/loader": "^0.25.0",
+    "assemblyscript": "^0.25.0"
   },
   "type": "module",
   "exports": {
