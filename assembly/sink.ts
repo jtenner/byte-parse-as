@@ -197,11 +197,12 @@ export class ByteSink {
       len   = end - start;
     }
 
-    return this.buffer.slice(start, len);
+    if (!len) return new ArrayBuffer(0);
+    return this.buffer.slice(start, end);
   }
 
   
-  toStaticArray(start: i32 = 0, end: i32 = i32.MAX_VALUE): ArrayBuffer {
+  toStaticArray(start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<u8> {
     let len = this.byteLength as u32;
 
     if (start != 0 || end != i32.MAX_VALUE) {
@@ -213,15 +214,16 @@ export class ByteSink {
       len   = end - start;
     }
 
-    let output = new StaticArray(len);
+    let output = new StaticArray<u8>(len);
     memory.copy(
       changetype<usize>(output),
       this.dataStart + <usize>start,
       <usize>len,
     );
-    return this.buffer.slice(start, len);
-  }
 
+    if (!len) return [];
+    return output;
+  }
 
   @inline protected ensureCapacity(deltaBytes: u32): void {
     let buffer  = this.buffer;
