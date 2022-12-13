@@ -139,7 +139,7 @@ export class ByteSink {
     let offset = this.offset;
     let buffer = this.buffer;
     store<T>(changetype<usize>(buffer) + <usize>offset, value);
-    this.offset = offset + offsetof<T>();
+    this.offset = offset + sizeof<T>();
   }
 
   reserve(capacity: i32, clear: bool = false): void {
